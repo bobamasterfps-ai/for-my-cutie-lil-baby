@@ -1,0 +1,86 @@
+{
+  "entities": {
+    "Room": {
+      "title": "Room",
+      "description": "A game room for multiplayer interaction",
+      "type": "object",
+      "properties": {
+        "roomCode": { "type": "string" },
+        "questions": { "type": "array", "items": { "type": "string" } },
+        "player1": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "answers": { "type": "array", "items": { "type": "string" } },
+            "submitted": { "type": "boolean" }
+          }
+        },
+        "player2": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "answers": { "type": "array", "items": { "type": "string" } },
+            "submitted": { "type": "boolean" }
+          }
+        },
+        "bucketList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": { "type": "string" },
+              "completed": { "type": "boolean" }
+            }
+          }
+        },
+        "timeline": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "voiceNote": { "type": "string" },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "sender": { "type": "string" },
+              "text": { "type": "string" },
+              "timestamp": { "type": "string" }
+            }
+          }
+        },
+        "moods": {
+          "type": "object",
+          "properties": {
+            "player1": { "type": "string" },
+            "player2": { "type": "string" }
+          }
+        },
+        "lovePoints": { "type": "number" },
+        "loveCounterStartDate": { "type": "string", "format": "date-time" },
+        "virtualInteractions": { "type": "object" },
+        "scrapbook": { "type": "array", "items": { "type": "object" } },
+        "loveLetters": { "type": "array", "items": { "type": "object" } },
+        "locationData": { "type": "object" },
+        "relationshipGoals": { "type": "array", "items": { "type": "object" } },
+        "status": { "type": "string", "enum": ["waiting", "playing", "finished"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["roomCode", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "rooms/{roomCode}": {
+      "schema": "Room",
+      "description": "Stores game room data"
+    }
+  }
+}

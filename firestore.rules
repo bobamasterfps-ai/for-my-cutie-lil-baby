@@ -1,0 +1,50 @@
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: rooms
+// Document ID: {roomCode}
+// Fields:
+//   - roomCode: string (required)
+//   - player1: map (optional)
+//     - name: string
+//     - answers: list of strings
+//     - submitted: boolean
+//   - player2: map (optional)
+//     - name: string
+//     - answers: list of strings
+//     - submitted: boolean
+//   - status: string (required, enum: ['waiting', 'playing', 'finished'])
+//   - createdAt: timestamp (required)
+//
+// ===============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isValidRoom(data) {
+      return data.roomCode is string && data.roomCode.size() > 0 &&
+             data.status in ['waiting', 'playing', 'finished'] &&
+             data.createdAt is timestamp;
+    }
+
+    match /rooms/{roomCode} {
+      // Allow anyone to read/write rooms for this specific game (No login required as per request)
+      // Note: In a real app, we'd use anonymous auth, but user asked for "No login".
+      // We'll use public access for this specific prototype.
+      allow read, create, update: if true;
+      
+      // Validation on create
+      allow create: if isValidRoom(request.resource.data);
+      
+      // Validation on update
+      allow update: if isValidRoom(request.resource.data);
+    }
+  }
+}
